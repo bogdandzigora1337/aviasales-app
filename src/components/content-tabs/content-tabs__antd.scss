@@ -1,0 +1,31 @@
+$widthTabsGroup: 100%;
+
+.ant-radio-group {
+  display: flex;
+}
+
+.content__tabs__radio-group {
+  width: $widthTabsGroup;
+}
+
+.ant-radio-button-wrapper {
+  width: $widthTabsGroup / 2;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  font-family: "OpenSans";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px; /* 166.667% */
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.ant-radio-button-wrapper-checked {
+  background-color: var(--frequently-used-primary-500, #2196f3) !important;
+  color: #ffffff !important;
+}

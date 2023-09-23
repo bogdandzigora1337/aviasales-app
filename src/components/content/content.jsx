@@ -1,18 +1,18 @@
-import "../content/content.css";
+import cl from "./content.module.scss";
 
 import ContentTabs from "../content-tabs/content-tabs";
-import ContentFilter from "../filter-filter/content-filter";
+import ContentFilter from "../content-filter/content-filter";
 import ContentTicketsList from "../content-tickets-list/content-tickets-list";
 import ContentButton from "../content-button/content-button";
 
 export default function Content() {
   return (
-    <div className="content">
+    <div className={cl.content}>
       <ContentFilter></ContentFilter>
-      <div className="main">
-        <ContentTabs></ContentTabs>
-        <ContentTicketsList></ContentTicketsList>
-        <ContentButton></ContentButton>
+      <div className={cl.content__main}>
+        <ContentTabs />
+        <ContentTicketsList />
+        <ContentButton />
       </div>
     </div>
   );

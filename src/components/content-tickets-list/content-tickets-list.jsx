@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import ContentTicket from "../content-ticket/content-ticket";
 
-import "../content-tickets-list/content-tickets-list.css";
+import cl from "./content-tickets-list.module.scss";
 
 export default function ContentTicketsList() {
   const ticketsArr = [
@@ -40,5 +40,7 @@ export default function ContentTicketsList() {
     return ticketComponents;
   };
 
-  return <ul className="content-tickets-list">{getTicketInformation()}</ul>;
+  return (
+    <ul className={cl["content__tickets-list"]}>{getTicketInformation()}</ul>
+  );
 }

@@ -1,0 +1,16 @@
+.header {
+  height: 160px;
+  display: flex;
+  justify-content: center;
+
+  @media screen and (max-width: 768px) {
+    height: 100px;
+  }
+
+  &__logo {
+    width: 81px;
+    @media screen and (max-width: 400px) {
+      width: 60px;
+    }
+  }
+}

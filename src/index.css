@@ -1,0 +1,24 @@
+@import-normalize;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Учитывать границы в общей ширине/высоте */
+}
+
+@font-face {
+  font-family: "OpenSans";
+  font-display: swap;
+  src: url("./fonts/OpenSans-Regular.woff") format("woff"),
+    url("./fonts/OpenSans-Regular.woff2") format("woff2"),
+    url("./fonts/OpenSans-Regular.woff") format("woff"),
+    url("./fonts/OpenSans-Regular.woff2") format("woff2");
+}
+
+body {
+  font-family: "OpenSans", sans-serif;
+}
+
+ul {
+  list-style-type: none;
+}
