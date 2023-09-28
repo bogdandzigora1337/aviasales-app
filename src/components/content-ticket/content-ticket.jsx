@@ -3,8 +3,6 @@ import cl from "./content-ticket.module.scss";
 export default function ContentTicket({ ticket }) {
   const ticketInfo = ticket[0];
 
-  console.log(ticketInfo);
-
   return (
     <li className={cl["content__tickets-list-item"]}>
       <div className={cl["content__ticket"]}>
