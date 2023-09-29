@@ -1,1 +1,1 @@
-https://aviasales-project-bw9kkybt9-bogdandzigora1337.vercel.app/
+https://aviasales-project-bogdandzigora1337.vercel.app/
