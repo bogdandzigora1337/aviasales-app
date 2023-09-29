@@ -1,7 +1,5 @@
 import { useState } from "react";
-
 import ContentTicket from "../content-ticket/content-ticket";
-
 import cl from "./content-tickets-list.module.scss";
 
 export default function ContentTicketsList() {
@@ -29,18 +27,9 @@ export default function ContentTicketsList() {
   ];
   const [tickets, setTickets] = useState(ticketsArr);
 
-  const getTicketInformation = () => {
-    const ticketComponents = [];
-
-    for (let i = 0; i < 5; i++) {
-      const ticket = tickets;
-      ticketComponents.push(<ContentTicket key={i} ticket={ticket} />);
-    }
-
-    return ticketComponents;
-  };
-
   return (
-    <ul className={cl["content__tickets-list"]}>{getTicketInformation()}</ul>
+    <ul className={cl["content__tickets-list"]}>
+      <ContentTicket key={1} ticket={tickets} />
+    </ul>
   );
 }

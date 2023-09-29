@@ -1,14 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-
 import { Checkbox } from "antd";
-
 import cl from "./content-filter.module.scss";
-
 import { allTickets, toggleCheckbox } from "../../redux/actions";
 
 export default function ContentFilter() {
   const dispatch = useDispatch();
-
   const { transferAllTicket, transferState } = useSelector(
     (res) => res.checkboxReducer
   );

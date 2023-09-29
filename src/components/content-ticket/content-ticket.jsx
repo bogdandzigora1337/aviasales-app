@@ -1,40 +1,102 @@
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { format, addMinutes } from "date-fns";
+import uniqId from "uniqid";
+
 import cl from "./content-ticket.module.scss";
 
-export default function ContentTicket({ ticket }) {
-  const ticketInfo = ticket[0];
+function TicketHeader({ price }) {
+  return (
+    <div className={cl["content__ticket-header"]}>
+      <h1 className={cl["content__ticket-price"]}>
+        {price.toLocaleString("ru-RU")} P
+      </h1>
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/S7_new_logo.svg/1024px-S7_new_logo.svg.png"
+        alt="#"
+        className={cl["content__ticket-logo"]}
+      />
+    </div>
+  );
+}
 
+function TicketSegment({ flightInfo }) {
+  const { origin, destination, date, duration, stops } = flightInfo;
+
+  const formatDate = (dateString, duration = 0) => {
+    const date = new Date(dateString);
+    const newDate = addMinutes(date, duration);
+    return format(newDate, "HH:mm");
+  };
+
+  const formatDuration = (durationInMinutes) => {
+    const hours = Math.floor(durationInMinutes / 60);
+    const minutes = durationInMinutes % 60;
+    return `${hours}ч ${minutes}мин`;
+  };
+
+  return (
+    <table key={uniqId()} className={cl["content__ticket-table-info"]}>
+      <thead>
+        <tr>
+          <td>
+            {origin}-{destination}
+          </td>
+          <td>в пути</td>
+          <td>
+            {stops.length}{" "}
+            {stops.length === 0
+              ? "пересадок"
+              : stops.length === 1
+              ? "пересадка"
+              : "пересадки"}
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            {formatDate(date)}-{formatDate(date, duration)}
+          </td>
+          <td>{formatDuration(duration)}</td>
+          <td>{[stops].join(", ")}</td>
+        </tr>
+      </tbody>
+    </table>
+  );
+}
+
+function Ticket({ ticket }) {
   return (
     <li className={cl["content__tickets-list-item"]}>
       <div className={cl["content__ticket"]}>
-        <div className={cl["content__ticket-header"]}>
-          <h1 className={cl["content__ticket-price"]}>{ticketInfo.price}</h1>
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/S7_new_logo.svg/1024px-S7_new_logo.svg.png"
-            alt="#"
-            className={cl["content__ticket-logo"]}
-          />
-        </div>
-        <table className={cl["content__ticket-table-info"]}>
-          <thead>
-            <tr>
-              <td>
-                {ticketInfo.segments[0].origin}-{ticketInfo.segments[1].origin}
-              </td>
-              <td>в пути</td>
-              <td>2 пересадки</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                {ticketInfo.segments[0].date}-{ticketInfo.segments[1].date}
-              </td>
-              <td>{ticketInfo.segments[0].duration}</td>
-              <td>HKG, JNB</td>
-            </tr>
-          </tbody>
-        </table>
+        <TicketHeader price={ticket.price} />
+        {ticket.segments.map((flightInfo) => {
+          return <TicketSegment key={uniqId()} flightInfo={flightInfo} />;
+        })}
       </div>
     </li>
+  );
+}
+
+export default function ContentTicket() {
+  const [tickets, setTickets] = useState(null);
+  const allTickets = useSelector((value) => value.ticketsReducer.data.tickets);
+
+  const numberTickets = useSelector(
+    (reducer) => reducer.moreTicketsReducer.numberTickets
+  );
+
+  useEffect(() => {
+    setTickets(allTickets);
+  }, [allTickets, tickets]);
+
+  return (
+    <>
+      {tickets &&
+        tickets
+          .slice(0, numberTickets)
+          .map((ticket) => <Ticket key={uniqId()} ticket={ticket}></Ticket>)}
+    </>
   );
 }
