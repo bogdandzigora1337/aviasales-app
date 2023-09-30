@@ -8,13 +8,17 @@ export default function ContentFilter() {
   const { transferAllTicket, transferState } = useSelector(
     (res) => res.checkboxReducer
   );
+  const ticketsReceived = useSelector(
+    (reducers) =>
+      reducers.ticketsReducer.data && reducers.ticketsReducer.data.tickets
+  );
 
   const handleClickAllTickets = () => {
-    dispatch(allTickets());
+    dispatch(allTickets(ticketsReceived));
   };
 
   const handleClickOtherStatusTickets = (action) => {
-    dispatch(toggleCheckbox(action));
+    dispatch(toggleCheckbox(action, ticketsReceived));
   };
 
   return (

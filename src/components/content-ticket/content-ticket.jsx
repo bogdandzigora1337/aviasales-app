@@ -5,14 +5,14 @@ import uniqId from "uniqid";
 
 import cl from "./content-ticket.module.scss";
 
-function TicketHeader({ price }) {
+function TicketHeader({ price, carrier }) {
   return (
     <div className={cl["content__ticket-header"]}>
       <h1 className={cl["content__ticket-price"]}>
         {price.toLocaleString("ru-RU")} P
       </h1>
       <img
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/S7_new_logo.svg/1024px-S7_new_logo.svg.png"
+        src={`http://pics.avs.io/99/36/${carrier}.png`}
         alt="#"
         className={cl["content__ticket-logo"]}
       />
@@ -70,7 +70,7 @@ function Ticket({ ticket }) {
   return (
     <li className={cl["content__tickets-list-item"]}>
       <div className={cl["content__ticket"]}>
-        <TicketHeader price={ticket.price} />
+        <TicketHeader price={ticket.price} carrier={ticket.carrier} />
         {ticket.segments.map((flightInfo) => {
           return <TicketSegment key={uniqId()} flightInfo={flightInfo} />;
         })}
@@ -81,14 +81,16 @@ function Ticket({ ticket }) {
 
 export default function ContentTicket() {
   const [tickets, setTickets] = useState(null);
-  const allTickets = useSelector((value) => value.ticketsReducer.data.tickets);
+  const allTickets = useSelector((value) => value.checkboxReducer.data);
 
   const numberTickets = useSelector(
     (reducer) => reducer.moreTicketsReducer.numberTickets
   );
 
   useEffect(() => {
-    setTickets(allTickets);
+    if (allTickets) {
+      setTickets(allTickets);
+    }
   }, [allTickets, tickets]);
 
   return (

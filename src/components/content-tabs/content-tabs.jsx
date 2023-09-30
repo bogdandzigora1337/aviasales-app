@@ -7,7 +7,7 @@ import "./content-tabs__antd.scss";
 import cl from "./content-tabs.module.scss";
 
 export default function ContentTabs() {
-  const ticketFilter = useSelector((state) => state.filterReducer.filter);
+  const ticketFilter = useSelector((state) => state.checkboxReducer.filter);
   const dispatch = useDispatch();
 
   const handleClick = (actionFn) => {

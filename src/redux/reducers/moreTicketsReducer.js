@@ -9,7 +9,9 @@ export const moreTicketsReducer = (state = initialState, action) => {
     case MORE_TICKETS:
       return {
         ...state,
-        numberTickets: state.numberTickets + 5,
+        numberTickets: action.payload
+          ? state.numberTickets + action.payload
+          : 5,
       };
 
     default:

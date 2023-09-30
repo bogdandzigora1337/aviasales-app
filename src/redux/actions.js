@@ -15,23 +15,29 @@ import {
   MORE_TICKETS,
 } from "./types";
 
-export function moreTickets() {
-  return { type: MORE_TICKETS };
+export function moreTickets(numOpenings) {
+  return { type: MORE_TICKETS, payload: numOpenings };
 }
 
 export function cheapTicket() {
-  return { type: FILTER_CHEAP_TICKET };
+  return (dispatch) => {
+    dispatch({ type: FILTER_CHEAP_TICKET });
+    dispatch(moreTickets(0));
+  };
 }
 
 export function fastTicket() {
-  return { type: FILTER_FAST_TICKET };
+  return (dispatch) => {
+    dispatch({ type: FILTER_FAST_TICKET });
+    dispatch(moreTickets(0));
+  };
 }
 
-export function allTickets() {
-  return { type: CHECKBOX_ALL_TICKETS };
+export function allTickets(data) {
+  return { type: CHECKBOX_ALL_TICKETS, payload: data };
 }
 
-export function toggleCheckbox(checkboxType) {
+export function toggleCheckbox(checkboxType, data) {
   let actionType;
 
   switch (checkboxType) {
@@ -51,7 +57,7 @@ export function toggleCheckbox(checkboxType) {
       throw new Error("Неизвестный тип чекбокса");
   }
 
-  return { type: actionType };
+  return { type: actionType, payload: data };
 }
 
 export const getUserIdRequest = () => ({
@@ -115,7 +121,10 @@ export const getTickets = (userId) => {
 
         return response.json();
       })
-      .then((data) => dispatch(getTicketSuccess(data)))
+      .then((data) => {
+        const ticketsSort = data.tickets.sort((a, b) => a.price - b.price);
+        return dispatch(getTicketSuccess({ ...data, tickets: ticketsSort }));
+      })
       .catch((error) => dispatch(getTicketFailure(error.message)));
   };
 };

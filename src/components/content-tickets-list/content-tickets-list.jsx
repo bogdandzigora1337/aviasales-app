@@ -1,35 +1,27 @@
-import { useState } from "react";
 import ContentTicket from "../content-ticket/content-ticket";
 import cl from "./content-tickets-list.module.scss";
+import { useSelector } from "react-redux";
 
 export default function ContentTicketsList() {
-  const ticketsArr = [
-    {
-      price: "13 400 P",
-      carrier: "код авиакомпании",
-      segments: [
-        {
-          origin: "mow",
-          destination: "код города",
-          date: "10:45",
-          stops: [],
-          duration: "21ч 15мин",
-        },
-        {
-          origin: "hkt",
-          destination: "код города",
-          date: "08:00",
-          stops: [],
-          duration: "время перелета в минутах",
-        },
-      ],
-    },
-  ];
-  const [tickets, setTickets] = useState(ticketsArr);
+  const ticketCountCheck = useSelector((reducer) => {
+    return reducer.checkboxReducer.data.length;
+  });
+
+  const errorMessage = useSelector((reducer) => reducer.ticketsReducer.error);
 
   return (
-    <ul className={cl["content__tickets-list"]}>
-      <ContentTicket key={1} ticket={tickets} />
-    </ul>
+    <>
+      {ticketCountCheck ? (
+        <ul className={cl["content__tickets-list"]}>
+          <ContentTicket />
+        </ul>
+      ) : (
+        <h1 className={cl["content__tickets-notification"]}>
+          {errorMessage
+            ? "Перезагрузите страницу, произошла ошибка при получении данных с сервера ⚠️"
+            : "Рейсов, подходящих под заданные фильтры, не найдено ⚠️"}
+        </h1>
+      )}
+    </>
   );
 }
