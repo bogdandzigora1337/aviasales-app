@@ -31,20 +31,27 @@ export const checkboxReducer = (state = initialState, action) => {
       (res) => res === true
     );
 
-    function fn() {
+    function filterTicketsByTransfers() {
       if (payload) {
-        let filterTicket = payload.filter(
-          (ticket) =>
-            ticket.segments[0].stops.length === numTransfers ||
-            ticket.segments[0].stops.length === numTransfers
-        );
-        return filterTicket;
+        return payload.filter((ticket) => {
+          const transfersThere = ticket.segments[0].stops.length;
+          const transfersBack = ticket.segments[1].stops.length;
+
+          return numTransfers === 0
+            ? transfersThere === numTransfers && transfersBack === numTransfers
+            : transfersThere === numTransfers || transfersBack === numTransfers;
+        });
       }
+      return [];
     }
+
+    const filteredData = !property
+      ? [...new Set([...data, ...filterTicketsByTransfers()])]
+      : data.filter((item) => !filterTicketsByTransfers().includes(item));
 
     return {
       ...state,
-      data: fn(),
+      data: filteredData,
       transferAllTicket: updateTransferAllTicket,
       transferState: updateTransferState,
     };
@@ -52,20 +59,16 @@ export const checkboxReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case CHECKBOX_ALL_TICKETS:
-      return ((property) => {
-        const transferStateCopy = { ...transferState };
-
-        for (const key in transferStateCopy) {
-          transferStateCopy[key] = !property;
-        }
-
-        return {
-          ...state,
-          data: action.payload,
-          transferAllTicket: !property,
-          transferState: { ...transferStateCopy },
-        };
-      })(transferAllTicket);
+      const transferStateCopy = { ...transferState };
+      for (const key in transferStateCopy) {
+        transferStateCopy[key] = !transferAllTicket;
+      }
+      return {
+        ...state,
+        data: payload && !transferAllTicket ? payload : [],
+        transferAllTicket: !transferAllTicket,
+        transferState: { ...transferStateCopy },
+      };
 
     case CHECKBOX_NON_STOP_TICKETS:
       return toggleTransferStateProperty(
@@ -96,21 +99,22 @@ export const checkboxReducer = (state = initialState, action) => {
       );
 
     case FILTER_CHEAP_TICKET:
-      const sorterCheapTickets =
-        data && [...data].sort((a, b) => a.price - b.price);
+      const sorterCheapTickets = !!data.length
+        ? [...data].sort((a, b) => a.price - b.price)
+        : [];
 
       return {
         ...state,
-        data: sorterCheapTickets,
+        data: !!data.length && sorterCheapTickets,
         filter: "cheapest",
       };
 
     case FILTER_FAST_TICKET:
-      const sorterFastTickets =
-        data &&
-        [...data].sort(
-          (a, b) => a.segments[0].duration - b.segments[0].duration
-        );
+      const sorterFastTickets = !!data.length
+        ? [...data].sort(
+            (a, b) => a.segments[0].duration - b.segments[0].duration
+          )
+        : [];
 
       return {
         ...state,

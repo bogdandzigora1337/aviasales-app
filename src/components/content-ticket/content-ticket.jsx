@@ -80,7 +80,7 @@ function Ticket({ ticket }) {
 }
 
 export default function ContentTicket() {
-  const [tickets, setTickets] = useState(null);
+  const [tickets, setTickets] = useState([]);
   const allTickets = useSelector((value) => value.checkboxReducer.data);
 
   const numberTickets = useSelector(
@@ -95,7 +95,7 @@ export default function ContentTicket() {
 
   return (
     <>
-      {tickets &&
+      {!!tickets.length &&
         tickets
           .slice(0, numberTickets)
           .map((ticket) => <Ticket key={uniqId()} ticket={ticket}></Ticket>)}
