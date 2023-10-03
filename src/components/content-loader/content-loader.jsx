@@ -3,7 +3,7 @@ import { Progress } from "antd";
 import { useSelector } from "react-redux";
 
 export const ContentLoader = () => {
-  const colorsLoader = { "0%": "#108ee9", "100%": "#87d068" };
+  const colorsLoader = { "0%": "#f3f7fa", "100%": "#2196f3" };
   const percentLoad = useSelector(
     (reducer) => reducer.ticketsReducer.percentLoad
   );
@@ -15,6 +15,7 @@ export const ContentLoader = () => {
           percent={percentLoad}
           strokeColor={colorsLoader}
           showInfo={false}
+          trailColor={"transparent"}
         />
       ) : null}
     </div>
