@@ -5,7 +5,7 @@ import {
 } from "../types";
 
 const initialState = {
-  data: [],
+  data: null,
   loading: false,
   error: null,
 };
@@ -28,7 +28,7 @@ export const userIdReducer = (state = initialState, action) => {
     case FETCH_USER_ID_FAILURE:
       return {
         ...state,
-        data: [],
+        data: null,
         loading: false,
         error: action.payload,
       };

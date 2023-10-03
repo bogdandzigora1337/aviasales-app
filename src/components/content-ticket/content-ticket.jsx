@@ -81,7 +81,10 @@ function Ticket({ ticket }) {
 
 export default function ContentTicket() {
   const [tickets, setTickets] = useState([]);
-  const allTickets = useSelector((value) => value.checkboxReducer.data);
+  const allTickets = useSelector(
+    (reducer) =>
+      !!reducer.checkboxReducer.data.length && reducer.checkboxReducer.data
+  );
 
   const numberTickets = useSelector(
     (reducer) => reducer.moreTicketsReducer.numberTickets

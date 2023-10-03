@@ -21,6 +21,15 @@ const initialState = {
   },
 };
 
+const sortDataByPrice = (data) => {
+  return [...data].sort((a, b) => a.price - b.price);
+};
+const sortDataByDuration = (data) => {
+  return [...data].sort(
+    (a, b) => a.segments[0].duration - b.segments[0].duration
+  );
+};
+
 export const checkboxReducer = (state = initialState, action) => {
   const { data, transferAllTicket, transferState } = state;
   const { type, payload } = action;
@@ -45,9 +54,11 @@ export const checkboxReducer = (state = initialState, action) => {
       return [];
     }
 
+    const filteredTickets = filterTicketsByTransfers();
+
     const filteredData = !property
-      ? [...new Set([...data, ...filterTicketsByTransfers()])]
-      : data.filter((item) => !filterTicketsByTransfers().includes(item));
+      ? [...new Set([...data, ...filteredTickets])]
+      : data.filter((item) => !filteredTickets.includes(item));
 
     return {
       ...state,
@@ -57,7 +68,7 @@ export const checkboxReducer = (state = initialState, action) => {
     };
   };
 
-  switch (action.type) {
+  switch (type) {
     case CHECKBOX_ALL_TICKETS:
       const transferStateCopy = { ...transferState };
       for (const key in transferStateCopy) {
@@ -99,9 +110,7 @@ export const checkboxReducer = (state = initialState, action) => {
       );
 
     case FILTER_CHEAP_TICKET:
-      const sorterCheapTickets = !!data.length
-        ? [...data].sort((a, b) => a.price - b.price)
-        : [];
+      const sorterCheapTickets = !!data.length ? sortDataByPrice(data) : [];
 
       return {
         ...state,
@@ -110,11 +119,7 @@ export const checkboxReducer = (state = initialState, action) => {
       };
 
     case FILTER_FAST_TICKET:
-      const sorterFastTickets = !!data.length
-        ? [...data].sort(
-            (a, b) => a.segments[0].duration - b.segments[0].duration
-          )
-        : [];
+      const sorterFastTickets = !!data.length ? sortDataByDuration(data) : [];
 
       return {
         ...state,

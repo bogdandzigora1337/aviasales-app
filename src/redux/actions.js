@@ -110,21 +110,39 @@ export const getUserId = () => {
 };
 
 export const getTickets = (userId) => {
-  return function (dispatch) {
+  return async function (dispatch, getState) {
     dispatch(getTicketRequest());
 
-    fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${userId}`)
-      .then((response) => {
+    const fetchTickets = async () => {
+      try {
+        const response = await fetch(
+          `https://aviasales-test-api.kata.academy/tickets?searchId=${userId}`
+        );
+
         if (!response.ok) {
+          if (response.status === 500) {
+            await fetchTickets();
+          }
           throw new Error("Network response was not ok");
         }
 
-        return response.json();
-      })
-      .then((data) => {
-        const ticketsSort = data.tickets.sort((a, b) => a.price - b.price);
-        return dispatch(getTicketSuccess({ ...data, tickets: ticketsSort }));
-      })
-      .catch((error) => dispatch(getTicketFailure(error.message)));
+        const data = await response.json();
+
+        if (data && data.tickets) {
+          const ticketsSort = data.tickets.sort((a, b) => a.price - b.price);
+          dispatch(getTicketSuccess({ ...data, tickets: ticketsSort }));
+
+          if (data.stop === false) {
+            await fetchTickets();
+          }
+        } else {
+          throw new Error("invalid data received from the server");
+        }
+      } catch (error) {
+        dispatch(getTicketFailure(error));
+      }
+    };
+
+    await fetchTickets();
   };
 };

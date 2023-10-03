@@ -8,8 +8,8 @@ import ContentButton from "../content-button/content-button";
 export default function Content() {
   return (
     <div className={cl.content}>
-      <ContentFilter></ContentFilter>
-      <div className={cl.content__main}>
+      <ContentFilter />
+      <div className={cl["content__main"]}>
         <ContentTabs />
         <ContentTicketsList />
         <ContentButton />

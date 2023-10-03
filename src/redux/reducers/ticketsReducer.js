@@ -1,3 +1,4 @@
+import { act } from "react-dom/test-utils";
 import {
   FETCH_TICKETS_FAILURE,
   FETCH_TICKETS_REQUEST,
@@ -8,6 +9,7 @@ const initialState = {
   data: [],
   loading: false,
   error: null,
+  percentLoad: 0,
 };
 
 export const ticketsReducer = (state = initialState, action) => {
@@ -21,15 +23,17 @@ export const ticketsReducer = (state = initialState, action) => {
     case FETCH_TICKETS_SUCCESS:
       return {
         ...state,
-        data: action.payload,
-        loading: false,
+        data: [...state.data, action.payload.tickets],
+        loading: !action.payload.stop,
+        error: null,
+        percentLoad: !action.payload.stop ? state.percentLoad + 6 : 100,
       };
 
     case FETCH_TICKETS_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: !!state.data.length ? null : action.payload,
       };
 
     default:
