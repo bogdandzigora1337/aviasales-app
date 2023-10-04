@@ -1,6 +1,7 @@
-import cl from './content-loader.module.scss'
 import { Progress } from 'antd'
 import { useSelector } from 'react-redux'
+
+import cl from './content-loader.module.scss'
 
 const colorsLoader = { '0%': '#f3f7fa', '100%': '#2196f3' }
 

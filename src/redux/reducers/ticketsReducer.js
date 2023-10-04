@@ -8,6 +8,11 @@ const initialState = {
 }
 
 export const ticketsReducer = (state = initialState, action) => {
+  let newData
+  let newPercentLoader
+  let hasData
+  let newError
+
   switch (action.type) {
     case FETCH_TICKETS_REQUEST:
       return {
@@ -16,8 +21,8 @@ export const ticketsReducer = (state = initialState, action) => {
       }
 
     case FETCH_TICKETS_SUCCESS:
-      const newData = action.payload.tickets
-      const newPercentLoader = !action.payload.stop ? state.percentLoad + 6 : 100
+      newData = action.payload.tickets
+      newPercentLoader = !action.payload.stop ? state.percentLoad + 6 : 100
 
       return {
         ...state,
@@ -28,8 +33,8 @@ export const ticketsReducer = (state = initialState, action) => {
       }
 
     case FETCH_TICKETS_FAILURE:
-      const hasData = !!state.data.length
-      const newError = hasData ? null : action.payload
+      hasData = !!state.data.length
+      newError = hasData ? null : action.payload
 
       return {
         ...state,

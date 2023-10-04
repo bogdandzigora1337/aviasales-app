@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Checkbox } from 'antd'
+
 import { allTickets, toggleCheckbox } from '../../redux/actions'
 import { cheapTicket, fastTicket } from '../../redux/actions'
 

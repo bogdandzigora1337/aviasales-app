@@ -24,11 +24,15 @@ const initialState = {
 export const checkboxReducer = (state = initialState, action) => {
   const { data, transferAllTicket, transferState } = state
   const { type, payload } = action
+  let isAllTicketsChecked
+  let transferStateCopy
+  let sorterFastTickets
+  let sorterCheapTickets
 
   switch (type) {
     case CHECKBOX_ALL_TICKETS:
-      const isAllTicketsChecked = !transferAllTicket
-      const transferStateCopy = {}
+      isAllTicketsChecked = !transferAllTicket
+      transferStateCopy = {}
 
       for (const key in transferState) {
         transferStateCopy[key] = isAllTicketsChecked
@@ -54,7 +58,7 @@ export const checkboxReducer = (state = initialState, action) => {
       return toggleTransferStateProperty(state, 'threeStopTickets', 3, payload)
 
     case FILTER_CHEAP_TICKET:
-      const sorterCheapTickets = data.length ? sortDataByPrice(data) : []
+      sorterCheapTickets = data.length ? sortDataByPrice(data) : []
 
       return {
         ...state,
@@ -63,7 +67,7 @@ export const checkboxReducer = (state = initialState, action) => {
       }
 
     case FILTER_FAST_TICKET:
-      const sorterFastTickets = data.length ? sortDataByDuration(data) : []
+      sorterFastTickets = data.length ? sortDataByDuration(data) : []
 
       return {
         ...state,

@@ -1,7 +1,10 @@
-import cl from './content-button.module.scss'
-import { useDispatch, useSelector } from 'react-redux'
-import { moreTickets } from '../../redux/actions'
+import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Button } from 'antd'
+
+import { moreTickets } from '../../redux/actions'
+
+import cl from './content-button.module.scss'
 
 const getShowMoreTicketsText = (countCheck, countDisplayed) => {
   const remainingTickets = countCheck - countDisplayed

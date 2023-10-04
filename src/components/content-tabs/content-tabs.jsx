@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { cheapTicket, fastTicket } from '../../redux/actions'
+import { Radio } from 'antd'
 import { useEffect } from 'react'
 
-import { Radio } from 'antd'
-import './content-tabs__antd.scss'
+import { cheapTicket, fastTicket } from '../../redux/actions'
 
+import './content-tabs__antd.scss'
 import cl from './content-tabs.module.scss'
 
 const FilterButtons = ({ selectedFilter, onSelect }) => {
