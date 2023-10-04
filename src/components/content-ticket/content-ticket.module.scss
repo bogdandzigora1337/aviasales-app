@@ -11,11 +11,14 @@
     display: flex;
     justify-content: space-between;
     padding: 26px 20px 26px 20px;
+    @media screen and (max-width: 768px) {
+      padding: 10px 20px 5px 20px;
+    }
   }
 
   &-price {
     color: var(--primary-colors-primary-500, #2196f3);
-    font-family: "OpenSans";
+    font-family: 'OpenSans';
     font-size: 24px;
     font-style: normal;
     font-weight: 600;
@@ -32,9 +35,13 @@
     width: 100%;
     padding: 0px 0px 20px 20px;
 
+    @media screen and (max-width: 768px) {
+      padding: 0px 0px 10px 20px;
+    }
+
     thead {
       color: #a0b0b9;
-      font-family: "OpenSans";
+      font-family: 'OpenSans';
       font-size: 12px;
       font-style: normal;
       font-weight: 600;
@@ -45,7 +52,7 @@
 
     tbody {
       color: #4a4a4a;
-      font-family: "OpenSans";
+      font-family: 'OpenSans';
       font-size: 14px;
       font-style: normal;
       font-weight: 600;

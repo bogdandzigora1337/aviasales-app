@@ -14,12 +14,13 @@
     width: 95%;
     margin-right: 0;
     margin-bottom: 10px;
+    height: 200px; //!
   }
 
   &__title {
     display: block;
     color: #4a4a4a;
-    font-family: "OpenSans";
+    font-family: 'OpenSans';
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
@@ -29,8 +30,9 @@
     padding: 20px;
 
     @media screen and (max-width: 768px) {
-      font-size: 20px;
+      padding: 15px 0 10px 20px;
       margin-bottom: 10px;
+      font-size: 20px;
     }
   }
 
@@ -42,7 +44,7 @@
   &__checkbox {
     height: 20px;
     color: #4a4a4a;
-    font-family: "OpenSans";
+    font-family: 'OpenSans';
     font-size: 13px;
     font-style: normal;
     font-weight: 400;
@@ -52,7 +54,7 @@
 
     @media screen and (max-width: 768px) {
       font-size: 17px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
   }
 }

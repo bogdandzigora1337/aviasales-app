@@ -1,72 +1,62 @@
-import { useDispatch, useSelector } from "react-redux";
-import { Checkbox } from "antd";
-import { allTickets, toggleCheckbox } from "../../redux/actions";
-import { cheapTicket, fastTicket } from "../../redux/actions";
+import { useDispatch, useSelector } from 'react-redux'
+import { Checkbox } from 'antd'
+import { allTickets, toggleCheckbox } from '../../redux/actions'
+import { cheapTicket, fastTicket } from '../../redux/actions'
 
-import cl from "./content-filter.module.scss";
+import cl from './content-filter.module.scss'
+
+const FilterCheckbox = ({ label, checked, onClick }) => {
+  return (
+    <Checkbox className={cl['content-filter__checkbox']} onClick={onClick} checked={checked}>
+      {label}
+    </Checkbox>
+  )
+}
 
 export default function ContentFilter() {
-  const dispatch = useDispatch();
-  const { transferAllTicket, transferState } = useSelector(
-    (res) => res.checkboxReducer
-  );
+  const dispatch = useDispatch()
+  const { transferAllTicket, transferState } = useSelector((res) => res.checkboxReducer)
   const ticketsReceived = useSelector((reducers) => {
-    return reducers.ticketsReducer.data
-      ? [].concat(...reducers.ticketsReducer.data)
-      : [];
-  });
-  const ticketFilter = useSelector((state) => state.checkboxReducer.filter);
+    return reducers.ticketsReducer.data ? [].concat(...reducers.ticketsReducer.data) : []
+  })
+  const ticketFilter = useSelector((state) => state.checkboxReducer.filter)
 
-  const handleClickAllTickets = () => {
-    dispatch(allTickets(ticketsReceived));
-    ticketFilter === "cheapest" ? dispatch(cheapTicket) : dispatch(fastTicket);
-  };
+  const handleAllTicketsFilterClick = () => {
+    dispatch(allTickets(ticketsReceived))
+    dispatch(ticketFilter === 'cheapest' ? cheapTicket() : fastTicket())
+  }
 
-  const handleClickOtherStatusTickets = (action) => {
-    dispatch(toggleCheckbox(action, ticketsReceived));
-    ticketFilter === "cheapest" ? dispatch(cheapTicket) : dispatch(fastTicket);
-  };
+  const handleOtherStatusTicketsClick = (action) => {
+    dispatch(toggleCheckbox(action, ticketsReceived))
+    dispatch(ticketFilter === 'cheapest' ? cheapTicket() : fastTicket())
+  }
 
   return (
-    <div className={cl["content-filter"]}>
-      <h1 className={cl["content-filter__title"]}>количество пересадок</h1>
-      <div className={cl["content-filter__list-checkbox"]}>
-        <Checkbox
-          className={cl["content-filter__checkbox"]}
-          checked={transferAllTicket}
-          onClick={handleClickAllTickets}
-        >
-          Все
-        </Checkbox>
-        <Checkbox
-          className={cl["content-filter__checkbox"]}
+    <div className={cl['content-filter']}>
+      <h1 className={cl['content-filter__title']}>количество пересадок</h1>
+      <div className={cl['content-filter__list-checkbox']}>
+        <FilterCheckbox label="Все" checked={transferAllTicket} onClick={handleAllTicketsFilterClick} />
+        <FilterCheckbox
+          label="Без пересадок"
           checked={transferState.nonStopTickets}
-          onClick={() => handleClickOtherStatusTickets("nonStop")}
-        >
-          Без пересадок
-        </Checkbox>
-        <Checkbox
-          className={cl["content-filter__checkbox"]}
+          onClick={() => handleOtherStatusTicketsClick('nonStop')}
+        />
+        <FilterCheckbox
+          label="1 пересадка"
           checked={transferState.oneStopTickets}
-          onClick={() => handleClickOtherStatusTickets("oneStop")}
-        >
-          1 пересадка
-        </Checkbox>
-        <Checkbox
-          className={cl["content-filter__checkbox"]}
+          onClick={() => handleOtherStatusTicketsClick('oneStop')}
+        />
+        <FilterCheckbox
+          label="2 пересадки"
           checked={transferState.twoStopTickets}
-          onClick={() => handleClickOtherStatusTickets("twoStop")}
-        >
-          2 пересадки
-        </Checkbox>
-        <Checkbox
-          className={cl["content-filter__checkbox"]}
+          onClick={() => handleOtherStatusTicketsClick('twoStop')}
+        />
+        <FilterCheckbox
+          label="3 пересадки"
           checked={transferState.threeStopTickets}
-          onClick={() => handleClickOtherStatusTickets("threeStop")}
-        >
-          3 пересадки
-        </Checkbox>
+          onClick={() => handleOtherStatusTicketsClick('threeStop')}
+        />
       </div>
     </div>
-  );
+  )
 }

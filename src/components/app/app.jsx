@@ -1,25 +1,25 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getUserId } from "../../redux/actions";
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
-import cl from "./app.module.scss";
+import { getUserId } from '../../redux/actions'
+import Header from '../header/header'
+import Content from '../content/content'
+import { ContentLoader } from '../content-loader/content-loader'
 
-import Header from "../header/header";
-import Content from "../content/content";
-import { ContentLoader } from "../content-loader/content-loader";
+import cl from './app.module.scss'
 
 export default function App() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getUserId());
-  }, [dispatch]);
+    dispatch(getUserId())
+  }, [dispatch])
 
   return (
-    <div className={cl["app"]}>
+    <div className={cl['app']}>
       <ContentLoader />
       <Header />
       <Content />
     </div>
-  );
+  )
 }

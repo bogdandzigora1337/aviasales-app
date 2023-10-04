@@ -1,14 +1,10 @@
-import {
-  FETCH_USER_ID_FAILURE,
-  FETCH_USER_ID_REQUEST,
-  FETCH_USER_ID_SUCCESS,
-} from "../types";
+import { FETCH_USER_ID_FAILURE, FETCH_USER_ID_REQUEST, FETCH_USER_ID_SUCCESS } from '../types'
 
 const initialState = {
   data: null,
   loading: false,
   error: null,
-};
+}
 
 export const userIdReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -16,14 +12,14 @@ export const userIdReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-      };
+      }
 
     case FETCH_USER_ID_SUCCESS:
       return {
         ...state,
         data: action.payload,
         loading: false,
-      };
+      }
 
     case FETCH_USER_ID_FAILURE:
       return {
@@ -31,9 +27,9 @@ export const userIdReducer = (state = initialState, action) => {
         data: null,
         loading: false,
         error: action.payload,
-      };
+      }
 
     default:
-      return state;
+      return state
   }
-};
+}

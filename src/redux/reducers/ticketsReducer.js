@@ -1,16 +1,11 @@
-import { act } from "react-dom/test-utils";
-import {
-  FETCH_TICKETS_FAILURE,
-  FETCH_TICKETS_REQUEST,
-  FETCH_TICKETS_SUCCESS,
-} from "../types";
+import { FETCH_TICKETS_FAILURE, FETCH_TICKETS_REQUEST, FETCH_TICKETS_SUCCESS } from '../types'
 
 const initialState = {
   data: [],
   loading: false,
   error: null,
   percentLoad: 0,
-};
+}
 
 export const ticketsReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -18,25 +13,31 @@ export const ticketsReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-      };
+      }
 
     case FETCH_TICKETS_SUCCESS:
+      const newData = action.payload.tickets
+      const newPercentLoader = !action.payload.stop ? state.percentLoad + 6 : 100
+
       return {
         ...state,
-        data: [...state.data, action.payload.tickets],
+        data: [...state.data, newData],
         loading: !action.payload.stop,
         error: null,
-        percentLoad: !action.payload.stop ? state.percentLoad + 6 : 100,
-      };
+        percentLoad: newPercentLoader,
+      }
 
     case FETCH_TICKETS_FAILURE:
+      const hasData = !!state.data.length
+      const newError = hasData ? null : action.payload
+
       return {
         ...state,
         loading: false,
-        error: !!state.data.length ? null : action.payload,
-      };
+        error: newError,
+      }
 
     default:
-      return state;
+      return state
   }
-};
+}

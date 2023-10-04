@@ -13,136 +13,134 @@ import {
   FETCH_TICKETS_REQUEST,
   FETCH_TICKETS_SUCCESS,
   MORE_TICKETS,
-} from "./types";
+} from './types'
 
 export function moreTickets(numOpenings) {
-  return { type: MORE_TICKETS, payload: numOpenings };
+  return { type: MORE_TICKETS, payload: numOpenings }
 }
 
 export function cheapTicket() {
   return (dispatch) => {
-    dispatch({ type: FILTER_CHEAP_TICKET });
-    dispatch(moreTickets(0));
-  };
+    dispatch({ type: FILTER_CHEAP_TICKET })
+    dispatch(moreTickets(0))
+  }
 }
 
 export function fastTicket() {
   return (dispatch) => {
-    dispatch({ type: FILTER_FAST_TICKET });
-    dispatch(moreTickets(0));
-  };
+    dispatch({ type: FILTER_FAST_TICKET })
+    dispatch(moreTickets(0))
+  }
 }
 
 export function allTickets(data) {
-  return { type: CHECKBOX_ALL_TICKETS, payload: data };
+  return { type: CHECKBOX_ALL_TICKETS, payload: data }
 }
 
 export function toggleCheckbox(checkboxType, data) {
-  let actionType;
+  let actionType
 
   switch (checkboxType) {
-    case "nonStop":
-      actionType = CHECKBOX_NON_STOP_TICKETS;
-      break;
-    case "oneStop":
-      actionType = CHECKBOX_ONE_STOP_TICKETS;
-      break;
-    case "twoStop":
-      actionType = CHECKBOX_TWO_STOP_TICKETS;
-      break;
-    case "threeStop":
-      actionType = CHECKBOX_THREE_STOP_TICKETS;
-      break;
+    case 'nonStop':
+      actionType = CHECKBOX_NON_STOP_TICKETS
+      break
+    case 'oneStop':
+      actionType = CHECKBOX_ONE_STOP_TICKETS
+      break
+    case 'twoStop':
+      actionType = CHECKBOX_TWO_STOP_TICKETS
+      break
+    case 'threeStop':
+      actionType = CHECKBOX_THREE_STOP_TICKETS
+      break
     default:
-      throw new Error("Неизвестный тип чекбокса");
+      throw new Error('Неизвестный тип чекбокса')
   }
 
-  return { type: actionType, payload: data };
+  return { type: actionType, payload: data }
 }
 
 export const getUserIdRequest = () => ({
   type: FETCH_USER_ID_REQUEST,
-});
+})
 
 export const getUserIdSuccess = (userId) => ({
   type: FETCH_USER_ID_SUCCESS,
   payload: userId,
-});
+})
 
 export const getUserIdFailure = (error) => ({
   type: FETCH_USER_ID_FAILURE,
   payload: error,
-});
+})
 
 export const getTicketRequest = () => ({
   type: FETCH_TICKETS_REQUEST,
-});
+})
 export const getTicketSuccess = (data) => ({
   type: FETCH_TICKETS_SUCCESS,
   payload: data,
-});
+})
 export const getTicketFailure = (error) => ({
   type: FETCH_TICKETS_FAILURE,
   payload: error,
-});
+})
 
 export const getUserId = () => {
   return function (dispatch) {
-    dispatch(getUserIdRequest());
+    dispatch(getUserIdRequest())
 
-    fetch("https://aviasales-test-api.kata.academy/search")
+    fetch('https://aviasales-test-api.kata.academy/search')
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok')
         }
-        return response.json();
+        return response.json()
       })
       .then((data) => {
         if (data && data.searchId) {
-          dispatch(getUserIdSuccess(data.searchId));
-          dispatch(getTickets(data.searchId));
+          dispatch(getUserIdSuccess(data.searchId))
+          dispatch(getTickets(data.searchId))
         } else {
-          throw new Error("Invalid data received from the server");
+          throw new Error('Invalid data received from the server')
         }
       })
-      .catch((error) => dispatch(getUserIdFailure(error)));
-  };
-};
+      .catch((error) => dispatch(getUserIdFailure(error)))
+  }
+}
 
 export const getTickets = (userId) => {
-  return async function (dispatch, getState) {
-    dispatch(getTicketRequest());
+  return async function (dispatch) {
+    dispatch(getTicketRequest())
 
     const fetchTickets = async () => {
       try {
-        const response = await fetch(
-          `https://aviasales-test-api.kata.academy/tickets?searchId=${userId}`
-        );
+        const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${userId}`)
 
         if (!response.ok) {
           if (response.status === 500) {
-            await fetchTickets();
+            await fetchTickets()
           }
-          throw new Error("Network response was not ok");
+          throw new Error('Network response was not ok')
         }
 
-        const data = await response.json();
+        const data = await response.json()
 
         if (data && data.tickets) {
-          const ticketsSort = data.tickets.sort((a, b) => a.price - b.price);
-          dispatch(getTicketSuccess({ ...data, tickets: ticketsSort }));
+          const ticketsSort = data.tickets.sort((a, b) => a.price - b.price)
+          dispatch(getTicketSuccess({ ...data, tickets: ticketsSort }))
 
           if (data.stop === false) {
-            await fetchTickets();
+            await fetchTickets()
           }
         } else {
-          throw new Error("invalid data received from the server");
+          throw new Error('invalid data received from the server')
         }
       } catch (error) {
-        dispatch(getTicketFailure(error));
+        dispatch(getTicketFailure(error))
       }
-    };
+    }
 
-    await fetchTickets();
-  };
-};
+    await fetchTickets()
+  }
+}
